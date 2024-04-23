@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+  .left-link {
+      display: block;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+  }
+  
+  .left-link:hover {
+      background-color: #f0f0f0;
+  }
+  
+  .left-link.active {
+      font-weight: bold;
+      background-color: #007bff;
+      color: #fff;
+  }
+  
+  .password-link {
+      display: block;
+      margin-top: 20px;
+      color: #007bff;
+  }
+    </style>
+    
+    <section class="h-80 gradient-custom-2 " style="margin-top:80px;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center  h-100">
+            <div class="col col-lg-4 col-xl-4">
+              <div class="card left-link-panel">
+                  <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+                  {% if roll == 'seller' and choice == 'yes' %}
+                      <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+                      <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+                      <a href="/userproduct" class="{% if request.path == '/userproduct' %}active{% endif %} left-link">people ordered</a>
+                  {% elif roll == 'company' %}
+                      <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+                  {% endif %}
+                  {% if roll == 'seller' %}
+                  {% elif roll == 'company' %}
+                      <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+                      <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+                  {% endif %}
+                  <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                  <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+                  <a href="{% url 'password' user.id %}" class="{% if request.path == '/logout' %}active{% endif %} left-link">Change Password</a>
+              </div>
+          </div>
+            <div class="col col-lg-8 col-xl-8">
+              <div class="card">
+                <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                  <div class="ms-4 mt-1 mb-4 d-flex flex-column" style="width: 150px;">
+                    {% if log_det2.image %}
+                    <img src="{{log_det2.image.url}}"
+                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2 ml-3"
+                      style="width: 150px; height:150px; z-index: 1">
+                      {% else %}
+                      <img src="{{avatar.image.url}}"
+                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2 ml-3"
+                      style="width: 150px; height:150px; z-index: 1">
+                      {% endif %}
+                  </div>
+                 
+                  
+                  <div class="ms-5 mb-3" style="margin-top: 110px; margin-left:25px">
+                    <h5 style="color:white">{{log_det1.username}}</h5>
+                    <p style="color:white">{{log_det1.email}}</p>
+                  </div>
+                </div>
+                <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                <a href="{% url 'update' %}"> <button type="button" class="btn btn-outline-dark m-4" data-mdb-ripple-color="dark"
+                    style="z-index: 1;">
+                    Edit profile
+                  </button></a>
+                </div>
+                <div class="card-body p-4 text-black">
+                  <div class="mb-5">
+                    <p class="lead fw-normal mb-1">About</p>
+                    <div class="p-4" style="background-color: #f8f9fa;">
+                      <p class="font-italic mb-1"><b>name:</b> {{log_det2.name}}</p>
+                      <p class="font-italic mb-1"><b>Addres:</b> {{log_det2.address}}</p>
+                      <p class="font-italic mb-1"><b>Place:</b> {{log_det2.place}}</p>
+                      <p class="font-italic mb-1"><b>Country:</b> {{log_det2.country}}</p>
+                      <p class="font-italic mb-1"><b>District:</b> {{log_det2.district}}</p>
+                      <p class="font-italic mb-1"><b>Roll:</b> {{log_det2.roll}}</p>
+                    </div>
+                  </div>
+                  <a href="{% url 'logout' %}"><button type="button" class="btn btn-outline-dark m-4" data-mdb-ripple-color="dark"
+                    style="z-index: 1;">Logout</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+{% endblock %}

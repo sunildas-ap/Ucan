@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <style>
+      
+        .custom-table {
+            margin-top: 20px; 
+        }
+       
+        .custom-table table {
+            border-collapse: collapse;
+         
+            border: 1px solid black; 
+            width: 100%;
+        }
+        .custom-table .table-row {
+            border: 1px solid black;
+        }
+        .custom-table th, .custom-table td {
+            padding: 8px; 
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f2f2f2; 
+        }
+
+        
+        .custom-table th, .custom-table td {
+            border-right: 1px solid #ddd; 
+        }
+
+       
+        .custom-table th:last-child, .custom-table td:last-child {
+            border-right: none;
+        }
+
+        .custom-table .product-names p {
+            margin: 3px 0; 
+        }
+
+        .custom-table .product-images img {
+            max-width: 80px; 
+            height: auto; 
+            display: block; 
+            margin-bottom: 5px; 
+        }
+        .custom-table .product-names ul li:not(:last-child) {
+        border-bottom: 1px solid black;
+        padding-bottom: 10px; 
+        margin-bottom: 10px; 
+        }
+    </style>
+  <section class="featured spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2> Purchase Products</h2>
+                </div>
+            </div>
+        </div>
+        <div class="custom-table">
+            <table class="custom-table">
+                <thead>
+                    <tr class="table-header">
+                        <th class="user-id">User Name</th>
+                        <th class="product-name">Product Details</th>
+                        <th class="user-name">Order Address</th>
+                        <th class="phone-number">Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile, orders in customer_data.items %}
+                        {% for order in orders %}
+                            <tr class="table-row">
+                                <td class="user-id">{{profile.user.username }}</td>
+                                <td class="product-names">
+                                    <ul>
+                                        {% for product_info in order.purchased_products %}
+                                            <li style="list-style-type:none; margin-left:70px;">
+                                                <img src="{{ product_info.product.image.url }}" alt="{{ product_info.product.title }} Image" class="product-img" style="width: 80px;height: 80px;">
+                                                <p>{{ product_info.product.title }}: {{ product_info.order_item.quantity }}</p>
+                                                <p>Purchase Date: {{ product_info.purchase_date }}</p>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td class="user-name">{{ order.current_address }}</td>
+                                <td class="phone-number">{{ order.phone_number }} </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .except
+    {
+        color:blue;
+        font-size:20px
+    }
+</style>
+    <div class="job__details__content">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-5" style="margin-top: 20px;">
+                    <div class="job__details__text" style="text-align:center">
+                        <div class="job_details_pic" style="width:486px;margin-left: -15px;">
+                            <img src="{{job.image.url}}"  width="650px" height="400px">
+                        </div>
+                    </div>
+                </div>
+                {% comment %} <div class="col-lg-5" style="border: 1px solid;margin-top: 20px;">
+                        <h3>Position</h3>
+                        <p>{{ job.title}}</p>
+                        <h3>Salary</h3>
+                        <p>₹ {{job.salary}}</p>
+                        <h3>Job description</h3>
+                        <p>{{job.description}}</p>
+                        <h3>required skill</h3>
+                        <p>{{job.skills}}</p>
+                        {% if choice == 'yes' %}
+                        <button type="submit" class="btn btn-primary"> <a href="{% url 'job_application' job.id %}" style="color: white;">Apply</a></div></button>
+                        {% else %}
+                        <p class='except'>Only physically challenged people can aplly</p>
+                        {% endif %}
+                    </div> {% endcomment %}
+                    <div class="col-lg-7 mt-3">
+                        <div class="card" style="width:650px;height:400px;">
+                            <div class="card-body">
+                                <h1 class="h2">{{ job.title}}</h1>
+                                <p class="h3 py-2">₹{{job.salary}}</p>
+                                 
+                                <h5>Description:</h5>
+                                <p>{{job.description}}</p>
+                                <h5>required skill</h5>
+                                 <p>{{job.skills}}</p>
+                                 {% if choice == 'yes' %}
+                               <button type="submit" class="btn btn-primary"> <a href="{% url 'job_application' job.id %}" style="color: white;">Apply</a></div></button>
+                               {% else %}
+                              <p class='except'>Only physically challenged people can apply</p>
+                               {% endif %}
+                            </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Details Section End -->
+
+<!-- Related Section Begin -->
+<section class="related spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="related-title">Related Jobs</h3>
+            </div>
+        </div>
+      
+    <div class="row">{%for job in related_jobs %}
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem;margin-top:80px;margin-left:60px;margin-bottom:80px;">
+              <img class="card-img-top" src={{job.image.url}} alt="Card image cap" style="width: 400px;height: 200px;">
+              <div class="card-body" style="height: 100px;">
+                <h5 class="card-title" style="text-decoration-line: underline;"> <b>Job post</b></h5>
+                <h5 class="card-title"> {{job.title}}</h5>
+              </div>
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><b>Salary</b></li>
+                <li class="list-group-item">₹{{job.salary}}</li>
+              </ul>
+              <div class="card-body">
+                <button type="submit" class="btn btn-primary"> <a href="{% url 'singlejob' job.id %}" style="color: white;">View</a></div></button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          </div>
+</section>
+{% endblock %}

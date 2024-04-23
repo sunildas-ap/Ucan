@@ -1,0 +1,123 @@
+/* --------------addproduct page-------------- */
+  .leftlinkpanel
+  {
+  padding:10px;
+  }
+  .leftlink
+  {
+  padding:5px;
+  border-bottom:1px solid #ccc;
+  }
+  .leftlinkpanel
+  {
+  margin-top:90px;
+  }
+#divider{
+    margin-bottom:50px; margin-top:50px;
+}
+#product-form{
+    margin-bottom: 50px;
+}
+#catagoryselection{
+    width:300px;
+}
+#multi_upload_namrce{
+    width: 285px;
+}
+#product_added{
+    font-size: large;
+    text-align: center;
+}
+#inputs{
+    width: 600px;
+}
+#headvh{
+    background-color: #f0f0f0;
+}
+.left-link {
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.left-link:hover {
+    background-color: #f0f0f0;
+}
+
+.left-link.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.password-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+}
+/* --------------end addproduct page-------------- */
+/* -------------- edit product page-------------- */
+.leftlinkpanel
+{
+padding:10px;
+}
+.leftlink
+{
+padding:5px;
+border-bottom:1px solid #ccc;
+}
+.leftlinkpanel
+{
+margin-top:90px;
+}
+/* ... (your existing CSS) ... */
+.mask {
+display: flex;
+flex-direction: column;
+}
+
+.container.h-80 {
+flex: 1; /* Allow the container to expand and fill the available space */
+overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+.imag {
+flex: 0 0 auto; /* Allow the image upload section to grow and shrink as needed */
+width: 100%; /* Ensure the section takes full width */
+}
+
+.imgview .col-md-6 {
+width: 50%;
+padding: 5px; /* Adjust the spacing between items */
+box-sizing: border-box;
+}
+
+.imgview .image-item {
+position: relative;
+overflow: hidden;
+height: 200px; /* Set a specific height for the image container */
+}
+
+.imgview .image-item img {
+width: auto;
+height: 100%;
+max-width: 100%;
+object-fit: cover; /* Maintain aspect ratio */
+transition: transform 0.3s ease-in-out;
+}
+
+.imgview .image-item:hover img {
+transform: scale(1.1);
+}
+
+.imgview::after {
+content: "";
+flex: auto;
+}
+#del{
+    text-align: center;
+}

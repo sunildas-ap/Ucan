@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .leftlinkpanel
+    {
+    padding:10px;
+    }
+    .leftlink
+    {
+    padding:5px;
+    border-bottom:1px solid #ccc;
+    }
+    .leftlinkpanel
+    {
+    margin-top:90px;
+    }
+    </style>
+    <div class="hero-area hero-bg">
+        <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 offset-lg-2 text-center">
+                        <div class="hero-text">
+                            <div class="hero-text-tablecell">
+                        <div class="breadcrumb-text">
+                            <p>{{x.title}}</p>
+                            <h1>Edit Jobs</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <section class="vh-90 bg-image"
+      style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+      <div class="mask d-flex align-items-center h-100 gradient-custom-3" >
+        <div class="container h-80" >
+          <div class="row d-flex justify-content-center h-80">
+           <div class="col col-lg-4 col-xl-4">
+               <div class="card leftlinkpanel">
+             <a href="/profile"  class=" {% if request.path == '/profile' %}active{% endif %} postporudtcs leftlink"> Profile</a>
+          <a href="addproduct"  class=" {% if request.path == '/addproduct' %}active{% endif %} postporudtcs leftlink">Post Products</a>
+            <a class=" {% if request.path == '/order-history' %}active{% endif %} Orderhistory leftlink"  href="/order-history">Order history</a>
+              <a href="/myproducts" class="  {% if request.path == '/myproducts' %}active{% endif %} myproducts leftlink">My products</a>
+              <a href="/jobpost" class="  {% if request.path == '/jobpost' %}active{% endif %} postporudtcs leftlink">Post jobs</a>
+            </div>
+          </div>
+          
+            <div class="col-8 col-md-8 col-lg-8 col-xl-8" style="margin-bottom:50px; margin-top:50px">
+                
+                  <h3 class="text-uppercase text-center mb-3">Edit Job</h3>
+                  <form method='post' enctype="multipart/form-data" style="margin-bottom: 50px;" id="jobedit-form">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">   
+                      <select name="job_category" class="form-control form-control-lg">
+                        {% for job in all_jobs %}
+                        <option value="{{job.id}}">{{job.title}}</option>
+                        {% endfor %}
+                      </select>    
+                      <label class="form-label" for="Catagory"></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <input type="text" id="form3Example3cg" name="title" class="form-control form-control-lg" placeholder="Name of the job" value='{{job_value.title}}' required >
+                      <label class="form-label" for="title"></label>
+                    </div>
+    
+                    <div class="form-outline mb-4">
+                      <input type="number"  name="salary" placeholder="salary" class="form-control form-control-lg" value='{{job_value.salary}}' required >
+                      <label class="form-label" for="price" ></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <textarea name="description" rows="5" class="form-control form-control-lg" placeholder="Description">{{job_value.description}}</textarea>
+                      <label class="form-label" for="description"></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <textarea name="skills" rows="5" class="form-control form-control-lg" placeholder="skills required for the job" >{{job_value.skills}}</textarea>
+                        <label class="form-label" for="skills"></label>
+                      </div>
+                    <div class="form-outline mb-4">
+                      <img id='job-image' src="{{job_value.image.url}}" width="250px;" height="250px;">
+                      <label class="form-label" for="Image"><b>picture of the company</b></label>
+                      <input type="file" id='jobimg' class="form-control form-control-lg" name="image" />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Post Job</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $('#jobedit-form').on('submit', function(event) {
+            var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+            var formData = new FormData(this); // convert form to array
+               $.ajax({
+                type: 'POST',
+                url: 'editjob',
+                data: formData,
+                processData: false,
+                contentType: false,
+                  success: function(response) {
+                      
+                  },
+                  error: function(response) {
+                   
+                  }
+              });
+            });
+            $('#jobimg').on('change', function () {
+                var input = this;
+              
+                if (input.files && input.files[0]) {
+                  var reader = new FileReader();
+              
+                  reader.onload = function (e) {
+                    // Update the preview image src attribute
+                    $('#job-image').attr('src', e.target.result);
+                  };
+              
+                  reader.readAsDataURL(input.files[0]);
+                }
+              });
+              
+            </script>
+    </script>
+    {%endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+#width{
+    width: 600px;
+    margin-top:200px;
+}
+#img{
+    width:700px;
+    margin-left: 100px;
+    
+}
+#head{
+    text-align: center;
+    margin-top:50px;
+}
+.left-link {
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.left-link:hover {
+    background-color: #f0f0f0;
+}
+
+.left-link.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.password-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+}
+    a.active
+    {
+    font-weight: bold;
+    }
+    #userSearchResults ul {
+    list-style: none;
+    padding: 0;
+}
+
+#userSearchResults .list-group-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#userSearchResults .list-group-item img {
+    width: 80px; /* Adjust the width of the profile image */
+    height: auto;
+    margin-right: 20px;
+}
+
+#userSearchResults .list-group-item .username {
+    font-size: 158px; /* Adjust the font size of the username */
+}
+#searching{
+    margin-left: 100px;
+    margin-top:-250px;
+}
+#userSearchBtn{
+    width:160px;
+    padding:10px;
+}
+
+</style>
+<div class="col col-lg-4 col-xl-4">
+    <div class="card left-link-panel">
+        <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+        {% if roll == 'seller' and choice == 'yes' %}
+            <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+            <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+        {% elif roll == 'company' %}
+            <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+        {% endif %}
+        {% if roll == 'seller' %}
+        {% elif roll == 'company' %}
+            <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+            <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+        {% endif %}
+        <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+    </div>
+</div>
+
+<div class="container" id="width">
+    <div id="searching">
+    <input type="text" id="username" name="username" placeholder="Search Users:" class="form-control"><br>
+    <button type="submit" id="userSearchBtn" class="site-btn">SEARCH USERS</button>
+</div>
+    <h3 id="head">Users list</h3>
+    <ul class="list-group">
+        {% for userdetails in user %}
+        {% if userdetails.id != request.user.id %} 
+            {% for profile in profiles %}
+                {% if profile.user == userdetails %}
+                <div id="userSearchResults">
+        
+                   
+                <h3><a href="{% url 'checkview' userdetails.id %}?selected_user_id={{ userdetails.id }}">
+                    <input type="hidden" name="userid" value="{{userdetails.id}}">
+                    <li class="list-group-item " id="img">
+                        {% if profile.image %}
+                            <img src="{{ profile.image.url }}" alt="{{ userdetails.username }}'s Profile Image" width="100" height="100">{{ userdetails.username }}
+                        {% else %}
+                            <img src="{{avatar.image.url}}" alt="Default Image">{{ userdetails.username }}
+                        {% endif %}
+                    </li></a></h3>
+                {% endif %} 
+            {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+</div>  
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+        $('#userSearchBtn').click(function(e) {
+            e.preventDefault();
+            var searchQuery = $('#username').val().trim();
+            
+            $.ajax({
+                type: "GET",
+                url: "{% url 'user_search' %}",
+                data: { username: searchQuery },
+                success: function(response) {
+                    var users = response.users;
+                    console.log(users)
+                    var resultsHtml = '<ul class="list-group">';
+    
+                        for (var i = 0; i < users.length; i++) {
+                            resultsHtml += '<li class="list-group-item " id="img">';
+                            resultsHtml += '<a href="/checkview/' + users[i].uid + '/?selected_user_id=' + users[i].uid + '"><input type="hidden" name="userid" value="' + users[i].uid + '">';
+                            if (users[i].profile_image) {
+                                resultsHtml += '<img src="' + users[i].profile_image + '" alt="' + users[i].username + '\'s Profile Image" width="100" height="100">';
+                            } else {
+                                resultsHtml += '<img src="{{ avatar.image.url }}" alt="Default Image">';
+                            }
+                            resultsHtml += users[i].username + '</a></li>';
+                        }
+    
+                    resultsHtml += '</ul>';
+                    $('#userSearchResults').html(resultsHtml);
+                },
+            });
+        });
+    });
+
+</script>
+{% endblock %}

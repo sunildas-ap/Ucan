@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+    .left-link {
+        display: block;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    
+    .left-link:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .left-link.active {
+        font-weight: bold;
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .password-link {
+        display: block;
+        margin-top: 20px;
+        color: #007bff;
+    }
+    </style>
+    <div class="breadcrumb-section breadcrumb-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2 text-center">
+                        <div class="breadcrumb-text">
+                            <p></p>
+                            <h3>Order History</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    <div class="container">
+            
+              <div class="row d-flex justify-content-center  h-100">
+                <div class="col col-lg-4 col-xl-4">
+                    <div class="card left-link-panel">
+                        <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+                        {% if roll == 'seller' and choice == 'yes' %}
+                            <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+                            <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+                        {% elif roll == 'company' %}
+                            <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+                        {% endif %}
+                        {% if roll == 'seller' %}
+                        {% elif roll == 'company' %}
+                            <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+                            <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+                        {% endif %}
+                        <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                        <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+                    </div>
+                </div>
+          
+            <div class="col col-lg-8 col-xl-8" style="margin-bottom:30px;">
+            <div class="list-group">
+                <!-- Column Headings -->
+                <div class="list-group-item list-group-item-dark">
+                    <div class="row">
+                        <div class="col">Order Number</div>
+                        <div class="col">Created Date</div>
+                        <div class="col">Subtotal</div>
+                        <div class="col">Total</div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+    
+                <!-- Rows -->
+                {% for user_ordersrow in user_orders reversed %}
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col">{{ user_ordersrow.id }}</div>
+                        {% if user_ordersrow.created_at|time:"H:i:s" != "00:00:00" %}
+                            <div class="col">{{ user_ordersrow.created_at|date:"M. d, Y, g:i a" }}</div>
+                        {% else %}
+                            <div class="col">{{ user_ordersrow.created_at|date:"M. d, Y" }}</div>
+                        {% endif %}
+                        <div class="col">{{ user_ordersrow.subtotal }}</div>
+                        <div class="col">{{ user_ordersrow.total_price }}</div>
+                        <div class="col"><a href="/vieworderdetails?id={{ user_ordersrow.id }}"><button>View</button></a></div>
+                    </div>
+                </div> 
+            {% endfor %}
+            
+               
+                </div>
+                <!-- Add more rows as needed -->
+            </div>
+        </div>
+        </div>
+        {% endblock %}

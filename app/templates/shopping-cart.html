@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    /* Add this CSS to your stylesheet */
+    .featured_item_pic {
+        /* Set a height to ensure the image container is visible */
+        height: 200px; /* Adjust this value as needed */
+    
+        /* Add other necessary styles */
+        background-size: cover; /* Ensures the image covers the entire container */
+        background-position: center; /* Centers the image */
+    }
+</style>
+    <!-- Breadcrumb Section Begin -->
+  
+    <!-- Breadcrumb Section End -->
+
+    <!-- Shopping Cart Section Begin -->				
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                <form id="cartform">
+						{% if cart_items %}
+                    <div class="shopping__cart__table">
+                      
+                            <table style="border-width:2px; color: black;">
+                                <thead class="cart-table-head">
+                                    <tr class="table-head-row">
+                                        <th class="product-remove" ></th>
+                                        <th class="product-image">image</th>
+                                        <th class="product-name">name</th>
+                                        <th class="product-price">price</th>
+                                        <th class="product-quantity">quantity</th>
+                                        <th class="product-total">total</th>       
+                                    </tr>
+                                </thead>
+                       
+                                <tbody>
+                                    {% for item in cart_items %}
+                                    <tr class="table-body-row">
+                            
+                                        <td class="product-remove" id="remove-btn" data-item-id="{{ item.product.id }}"><a href="{% url 'remove_from_cart' %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                          </svg></a></td>
+                                        <td class="product-image"><img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" width=80px height=80px></td>
+                                        <td class="product-name"><input class="p_id" name="pid[]" type="hidden"  value="{{ item.id }}">{{ item.product.title }}</td>
+                                        <td class="product-price cost"><span>₹</span>{{ item.product.price|floatformat:2 }}</td>
+                                        <td class="product-quantity">
+                                            
+                                            <div class="number-input">
+                                                <input class="hidden_id" type="hidden"  value="{{ item.id }}">
+                                                <input class="quantity" name="quantity[]"   type="number"  value="{{ item.quantity }}" id="quantity_{{ item.product.id }}" min="1" placeholder="0" >
+                                    
+                                            </div>
+                                        
+                                        </td>
+                                        <td class="product-total total"><span>₹</span>{{ item.total_price|floatformat:2 }}</td>
+                                        
+                                </tr>
+                                </tbody>
+    
+                                
+                                {% endfor %}
+                                
+                        </table>
+                    </form>
+          
+                    </div>
+                    <div id="addingfailed" style="font-size: large;margin-left: 200px;"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn update__btn">
+                                <a id="edit-btn" class="boxed-btn edit-btn" ><i class="fa fa-spinner"></i> Update cart</a>
+                            </div>
+                            <div id="updated" style="font-size: large;margin-left: 200px;"></div>
+                        </div>
+                    </div>
+                </div>
+               
+                    <div class="cart__total" style="width: 300px;">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <li>Subtotal <span>₹{{ subtotal }}</span></li>
+                            <li>Tax <span>₹{{ tax }}</span></li>
+                            <li>Total <span>₹{{ grand_total }}</span></li>
+                        </ul>
+                        {% if request.user.is_authenticated %} 
+                        <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a>
+                        {%else%}
+                        <h5><b>please login to order</b></h5><br>
+                        <a href="{% url 'user_login' %}"button class="btn" style="background-color: black;color: white;">login</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+    <h2 class="mt-4" style=" margin-left:400px;">Your cart is empty!</h2>
+    {% endif %}
+    </section>
+    
+    <!-- Shopping Cart Section End -->
+<div id='add'></div>
+  
+
+    <!-- Search Begin -->
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+ $(document).ready(function() {
+
+$(".minus, .plus, .quantity").on("input click", function() {
+    var $row = $(this).closest('tr'); //get closest tr
+    var quan = parseInt($row.find('.quantity').val()); //get qty
+    
+    if (isNaN(quan) || quan < 0) {
+        quan = 0;
+        $row.find('.quantity').val(0); // reset input to 0 if invalid
+    }
+
+    var cost = parseFloat($row.find('.cost').text().replace('₹', ''));
+    var total = parseFloat(cost * quan).toFixed(2);
+    $row.find('.total').text('₹' + total); //add total 
+
+    var subtotal = 0;
+    $('.total').each(function() {
+        subtotal += parseFloat($(this).text().replace('₹', ''));
+    });
+
+    var product_tax = 10.00;
+    var grand_total = subtotal + product_tax;
+
+    // Update the displayed total values
+    $('.cart__total li:nth-child(1) span').text('₹' + subtotal.toFixed(2));
+    $('.cart__total li:nth-child(3) span').text('₹' + grand_total.toFixed(2));
+
+});
+
+$(".edit-btn").click(function() {
+
+     var data=$('#cartform').serializeArray();
+	 data.push({name: 'csrfmiddlewaretoken', value: '{{ csrf_token }}'});
+	  
+    
+    $.ajax({
+        type: "POST",
+        url: "/edit_cart_items",
+        data: data,
+        success: function(response) {
+            if (response.success) {
+              //  alert(response.message);
+        
+                 // Calculate and update the displayed total price for the item
+                var pricePerItem = parseFloat($(this).closest('tr').find('td:eq(2)').text().replace('$', ''));
+                var newTotalPrice = newQuantity * pricePerItem;
+                $(this).closest('tr').find('td:eq(4)').text('$' + newTotalPrice.toFixed(2));
+                
+
+              } else {
+                $('#updated').text("cart updated");
+                setTimeout(function() {
+                    $('#updated').text("");
+                }, 1000); 
+            }
+        },
+        error: function(error) {
+            $('#updated').text("error occured");
+            setTimeout(function() {
+                $('#updated').text("");
+            }, 1000); 
+        }
+    });
+});
+
+$(".product-remove").click(function(event) {
+    event.preventDefault();
+    var itemId = $(this).data('item-id').toString();
+
+    $.ajax({
+        type: "POST",
+        url: "/remove_from_cart/",
+        data: {
+            'item_id': itemId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: (response) => {
+            if (response.success) {
+                $(this).closest('tr').remove();
+
+                // Recalculate subtotal after removing an item
+                var subtotal = 0;
+                $('.total').each(function() {
+                    subtotal += parseFloat($(this).text().replace('₹', ''));
+                });
+
+                var product_tax = 10.00;
+                var grand_total = subtotal + product_tax;
+
+                // Update the displayed subtotal and total values
+                $('.cart__total li:nth-child(1) span').text('₹' + subtotal.toFixed(2));
+                $('.cart__total li:nth-child(3) span').text('₹' + grand_total.toFixed(2));
+
+                // Updating the cart count
+                let currentCount = parseInt($("#cart-count").text());
+                $("#cart-count").text(currentCount - 1);
+            } else {
+                $('#add').text(response.message);
+            }
+        },
+        error: function(error) {
+            console.log(error);
+            $('#add').text(error);
+        }
+    });
+});
+ });
+
+</script>
+{% endblock %}

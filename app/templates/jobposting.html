@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+  .left-link {
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    
+}
+
+.left-link:hover {
+    background-color: #f0f0f0;
+}
+
+.left-link.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.password-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+}
+    </style>
+    <div class="hero-area hero-bg">
+        <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 offset-lg-2 text-center">
+                        <div class="hero-text">
+                            <div class="hero-text-tablecell">
+                        <div class="breadcrumb-text">
+                            <p>{{x.title}}</p>
+                            <h1>Post Jobs</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <section class="vh-90"
+      style="background-color:#f0f0f0;">
+      <div class="mask d-flex align-items-center h-100 gradient-custom-3" >
+        <div class="container h-80" >
+          <div class="row d-flex justify-content-center h-80">
+            <div class="col col-lg-4 col-xl-4">
+              <div class="card left-link-panel">
+                  <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+                  {% if roll == 'seller' and choice == 'yes' %}
+                      <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+                      <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+                  {% elif roll == 'company' %}
+                      <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+                  {% endif %}
+                  {% if roll == 'seller' %}
+                  {% elif roll == 'company' %}
+                      <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+                      <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+                  {% endif %}
+                  <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                  <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+              </div>
+          </div>
+          
+            <div class="col-8 col-md-8 col-lg-8 col-xl-8" style="margin-bottom:50px; margin-top:50px">
+                
+                  <h3 class="text-uppercase text-center mb-3">Add Job</h3>
+                  <form method='post' enctype="multipart/form-data" style="margin-bottom: 50px;" id="job-form">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">   
+                      <select name="job_category" class="form-control form-control-lg">
+                        {% for job in jobs %}
+                        <option value="{{job.id}}">{{job.title}}</option>
+                        {% endfor %}
+                      </select>    
+                      <label class="form-label" for="Catagory"></label>
+                    </div><br>
+                    <div class="form-outline mb-4">
+                      <input type="text" id="form3Example3cg" name="title" class="form-control form-control-lg" placeholder="Name of the job" required >
+                      <label class="form-label" for="title"></label>
+                    </div>
+    
+                    <div class="form-outline mb-4">
+                      <input type="number"  name="salary" placeholder="salary" class="form-control form-control-lg" required >
+                      <label class="form-label" for="price" ></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <textarea name="description" rows="5" class="form-control form-control-lg" placeholder="Description"></textarea>
+                      <label class="form-label" for="Description"></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <textarea name="skills" rows="5" class="form-control form-control-lg" placeholder="skills required for the job"></textarea>
+                        <label class="form-label" for="skills"></label>
+                      </div>
+                    <div class="form-outline mb-4">
+                      <img id="img" src="" width="200px" height="200px" style="display: none;" >
+                      <label class="form-label" for="Image"><b>picture of the company</b></label>
+                      <input id="jobimg" type="file" class="form-control form-control-lg" name="image" required />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Post Job</button>
+                    </div>
+                    <div id="job_added" style="font-size: large; text-align: center;"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+      $('#job-form').on('submit', function(event) {
+        event.preventDefault();
+   var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+   var formData = new FormData(this); // convert form to array
+         $.ajax({
+          type: 'POST',
+          url: 'jobpost',
+          data: formData,
+          processData: false,
+          contentType: false,
+            success: function(response) {
+              $('#job_added').text("job Added Successfully");
+                
+            },
+            error: function(response) {
+              $('#job_added').text(response.responseJSON.error);
+            }
+        });
+    });
+
+    $('#jobimg').on('change', function () {
+      var input = this;
+
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          // Update the preview image src attribute
+          $('#img').attr('src', e.target.result).show();
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    });
+    </script>
+    {%endblock %}

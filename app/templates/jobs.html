@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+ 
+  .ms-5 {
+    margin-left: 5rem;
+  }
+  
+  .mt-5 {
+    margin-top: 5rem;
+  }
+  
+  .hero_search_form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .hero_search_form input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 300px;
+    font-size: 16px;
+  }
+  
+  .hero_search_form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  /* Styling for job cards */
+  .job-card {
+    width: 100%;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .job-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .job-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .job-card .card-body {
+    padding: 20px;
+  }
+  
+  .job-card .card-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+  }
+  
+  .job-card .list-group-item {
+    font-size: 16px;
+    border: none;
+  }
+  
+  .job-card .btn-info {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 16px;
+  }
+
+  .btn-info {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 16px;
+  }
+  
+  .btn-info:hover {
+    background-color: #0056b3;
+    /* You can add more styles for hover effect if needed */
+  }
+  
+  /* Additional style for the "View" button */
+  .btn-info:focus {
+    outline: none; /* Removes the default focus outline */
+    box-shadow: 0 0 0 2px #007bff; /* Adds a focus indicator */
+  }
+</style>
+
+<!-- Your HTML structure -->
+<div class="ms-5 mt-5">
+  <div class="hero__search">
+    <div class="hero_search_form">
+      <form id="job_search" method="GET">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" id="jobname" name="jobname" placeholder="Search jobs" class="form-control" >
+        </div>
+        <div class="form-group">
+          <button type="submit" class="site-btn">SEARCH</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div id="job-container" class="row">
+    <!-- Display job cards here -->
+    {% for job in all_jobs %}
+    <div class="col-md-4">
+      <div class="card job-card">
+        <img class="card-img-top" src="{{ job.image.url }}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title" style="text-decoration-line: none;"><b>Job post</b></h5>
+          <h5 class="card-title" style="text-decoration-line: none;">{{ job.title }}</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>Salary</b></li>
+          <li class="list-group-item">₹{{ job.salary }}</li>
+        </ul>
+        <div class="card-body">
+          <a href="{% url 'singlejob' job.id %}" class="btn btn-info">View</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('#job_search').submit(function(e) {
+            e.preventDefault();
+            var searchQuery = $('#jobname').val().trim();
+            
+            $.ajax({
+                type: "GET",
+                url: "{% url 'job_search_ajax' %}",
+                data: { jobname: searchQuery },
+                success: function(response) {
+                    var results = response.results;
+                    var resultsHtml = '';
+
+                    if (results.length === 0) {
+                        resultsHtml = '<div class="col-md-12"><h4>No job posts found.</h4></div>';
+                    } else {
+                        for (var i = 0; i < results.length; i++) {
+                            var jobDetailsURL = "{% url 'singlejob' 0 %}".replace('0', results[i].id);
+                            jobDetailsURL = "{% url 'singlejob' 0 %}".replace('0', results[i].id);
+
+                            resultsHtml += `
+                        <div class="col-md-4">
+                            <div class="card" style="width: 18rem;margin-top:80px;margin-left:60px;margin-bottom:80px;">
+                                <img class="card-img-top" src="${results[i].image}" alt="Card image cap" style="width: 400px;height: 200px;">
+                                <div class="card-body" style="height: 100px;">
+                                    <h5 class="card-title" style="text-decoration-line: underline;"> <b>Job post</b></h5>
+                                    <h5 class="card-title">${results[i].title}</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><b>Salary</b></li>
+                                    <li class="list-group-item">₹${results[i].salary}</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="${jobDetailsURL}" class="btn btn-primary" style="color: white;">View</a>
+                                </div>
+                            </div>
+                          </div>`;
+                        }
+                    }
+                
+                    // Update the HTML content in the designated container
+                    $('#job-container').html(resultsHtml);
+                },
+                error: function(error) {
+                    console.error('Error fetching job search results:', error);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

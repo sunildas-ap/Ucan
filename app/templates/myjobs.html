@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  .leftlinkpanel
+  {
+  padding:10px;
+  }
+  .leftlink
+  {
+  padding:5px;
+  border-bottom:1px solid #ccc;
+  }
+  .left-link {
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.left-link:hover {
+    background-color: #f0f0f0;
+}
+
+.left-link.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.password-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+}
+  </style>
+<h3 style="text-align: center; text-decoration: underline;">Manage Your Jobs</h3>
+<div class="container">           
+  <div class="row d-flex justify-content-center  h-100">
+    <div class="col col-lg-4 col-xl-4">
+      <div class="card left-link-panel">
+          <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+          {% if roll == 'seller' and choice == 'yes' %}
+              <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+              <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+              <a href="/userproduct" class="{% if request.path == '/userproduct' %}active{% endif %} left-link">people ordered</a>
+          {% elif roll == 'company' %}
+              <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+          {% endif %}
+          {% if roll == 'seller' %}
+          {% elif roll == 'company' %}
+              <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+              <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+          {% endif %}
+          <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+          <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+      </div>
+  </div>
+ <div class="col col-lg-8 col-xl-8">
+<div class="row">{% for job in job %}
+    <div class="col-md-5">
+      <div class="card" style="width: 18rem;margin-top:80px;margin-left:0px;margin-bottom:80px;">
+          <img class="card-img-top" src={{job.image.url}} alt="Card image cap" style="width: 400px;height: 200px;">
+          <div class="card-body" style="height: 100px;">
+            <h5 class="card-title" style="text-decoration-line: underline;"> <b>Job post</b></h5>
+            <h5 class="card-title"> {{job.title}}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>Salary</b></li>
+            <li class="list-group-item">₹{{job.salary}}</li>
+          </ul>
+          <div class="card-body">
+            <button type="submit" class="btn btn-primary"> <a href="{% url 'singlejob' job.id %}" style="color: white;">View</a></button> 
+            <button type="submit" class="btn btn-primary" style="float:right;width:70px;"> <a href="{% url 'editjob' job.id %}" style="color: white;">Edit</a></button><br><br>
+            <button type="submit" id="del" class="btn btn-primary" style="width:70px;" value='{{job.id}}'>Delete</button>
+            <div id="deleted"></div>
+          </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  
+    $(document).ready(function() {
+      $('.btn-primary#del').on('click', function(event) {
+        event.preventDefault(); 
+  
+        var jobId = $(this).val();
+        console.log(jobId);
+  
+        $.ajax({
+          type: 'POST',
+          url: '/delete_jobs/' + jobId + '/',
+          data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function(response) {
+              $('#deleted').text(response.message);
+              // Reload the page after successful deletion
+              location.reload();
+          },
+          error: function(xhr, status, error) {
+              $('#deleted').text('Job is not deleted');
+              console.log(xhr.status); 
+          }
+        });
+      });
+    });
+
+
+</script>
+      {% endblock %}

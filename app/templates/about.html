@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">          
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>{{abouthead.title}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- About Section Begin -->
+    <section class="about spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="about__pic">
+                        <img src="{{abouthead.image.url}}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for questions in question %}
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="about__item">
+                        <h4>{{questions.title}}</h4>
+                        <p>{{questions.description}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+    
+            </div>
+        </div>
+    </section>
+    <!-- About Section End -->
+
+    <!-- Testimonial Section Begin -->
+    <section class="testimonial">
+        <div class="container-fluid">
+            <div class="row">
+                {% for declaration in testimonial %}
+                <div class="col-lg-6 p-0">
+                    <div class="testimonial__text">
+                        <span class="icon_quotations"></span>
+                        <p>{{declaration.description}}
+                        </p>
+                        <div class="testimonial__author">
+                            <div class="testimonial__author__pic">
+                                <img src="{{declaration.image.url}}" alt="">
+                            </div>
+                            <div class="testimonial__author__text">
+                                <h5>{{declaration.title}}</h5>
+                                <p>{{declaration.job_title}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>{% endfor %}
+                <div class="col-lg-6 p-0">
+                    <div class="testimonial__pic set-bg" data-setbg="{{imgabout.image.url}}"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonial Section End -->
+
+    <!-- Team Section Begin -->
+   
+    <!-- Team Section End -->
+
+    <!-- Client Section Begin -->
+    {% comment %} <section class="clients spad">
+        <div class="container">
+            <div class="row">
+                {% for x in partners %}
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Partner</span>
+                        <h2>Happy Clients</h2>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                {% for x in clients%}
+                <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                    <a href="#" class="client__item"><img src="{{x.image.url}}" alt=""></a>
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </section> {% endcomment %}
+    <!-- Client Section End -->
+
+    <!-- Footer Section Begin -->
+ 
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+.form-control {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  /* Additional styles for the form container */
+  .login-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #f0f0f0;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #333;
+  }
+
+  .signup-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+  }
+
+</style>
+<div class="hero-area hero-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 offset-lg-2 text-center">
+          <div class="hero-text">
+            <div class="hero-text-tablecell">
+            </div></div></div></div></div></div>
+              <div style="margin-top: 100px; margin-bottom:50px;background-color: #f0f0f0;">
+                <h1 style="text-align: center;">Login </h1><br>
+                <section class=" text-center text-lg-start container"><br>
+                  <form method="POST" enctype="multipart/form-data" id="login-form">
+                      {% csrf_token %}
+                    <div class="form-outline mb-4">
+                      <input type="text" id="form2Example1" class="form-control" name="username" placeholder="Username">
+                      <label class="form-label" for="form2Example1"></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <input type="password" id="form2Example2" class="form-control" name="password" placeholder="Password">
+                      <label class="form-label" for="form2Example2"></label>
+                    </div>
+              
+                    <div id="log_in"></div>
+                    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                    <p>Are you a new user sign up here
+                  </form>
+                  <a href="{% url 'register' %}"><button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+                </div> 
+              </section>
+              </div>
+            
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+ $('#login-form').on('submit', function(event) {
+    event.preventDefault();
+
+    var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+    var formData = new FormData(this);
+
+    $.ajax({
+        type: 'POST',
+        url: 'user_login',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
+               
+                window.location.href = response.redirect;
+            } else {
+                
+                $('#log_in').text(response.message);
+                setTimeout(function() {
+                $('#log_in').text("");
+              }, 3000);
+            }
+        },
+        error: function() {
+            // Handle other types of errors, if needed
+            $('#log_in').text("An error occurred during login.");
+            setTimeout(function() {
+              $('#log_in').text("");
+          }, 1000); 
+        }
+        
+    });
+});
+
+
+</script>
+      {% endblock %}

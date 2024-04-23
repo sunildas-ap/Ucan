@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <style>
+        /* Custom CSS for styling */
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .breadcrumb-text {
+            text-align: center;
+        }
+
+        .breadcrumb-text h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .job-title {
+            font-size: 24px;
+        }
+
+        .thank-you {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .order-details {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #666;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px; /* Add margin at the bottom */
+        }
+
+        .card button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .card button:hover {
+            background-color: #f44336;
+        }
+    </style>
+
+    <div class="hero-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center"> <!-- Changed col-lg-9 to col-lg-12 -->
+                    <div class="hero-text">
+                        <div class="breadcrumb-text" style="margin-top:30px;">
+                            <h2>Details</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="card p-4">
+                    <h1 class="thank-you">Thank You for Your Order!</h1>
+                    <p class="order-details">Your order has been successfully placed. We will process it shortly.</p>
+                    <p class="order-details">Go to the profile tab: <strong>to know more about order details</strong></p>
+                    <p class="order-details">Estimated Delivery Date: <strong>within 5 days</strong></p>
+                    <div class="col"><a href="/order-history"><button>View</button></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

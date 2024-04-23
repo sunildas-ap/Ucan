@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  .left-link {
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.left-link:hover {
+    background-color: #f0f0f0;
+}
+
+.left-link.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.password-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+}
+</style>
+
+  <section class="vh-90" id="headvh">
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3" >
+      <div class="container h-80" >
+        <div class="row d-flex justify-content-center h-80">
+          <div class="col col-lg-4 col-xl-4">
+            <div class="card left-link-panel">
+                <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+                {% if roll == 'seller' and choice == 'yes' %}
+                    <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+                    <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+                {% elif roll == 'company' %}
+                    <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+                {% endif %}
+                {% if roll == 'seller' %}
+                {% elif roll == 'company' %}
+                    <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+                    <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+                {% endif %}
+                <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+            </div>
+        </div>
+       
+          <div class="col-8 col-md-8 col-lg-8 col-xl-8" id="divider">
+              
+                <h3 class="text-uppercase text-center mb-3">Add Product</h3>
+                <form method='post' enctype="multipart/form-data"  id="product-form">
+                  {% csrf_token %}
+                  <div class="form-outline mb-4">   
+                    <select name="product_category" class="form-control form-control-lg" id="catagoryselection" required>
+                      <option value="" class="form-control form-control-lg">Select type of product you want to sell</option>
+                      {% for product in all_product %}
+                      <option value="{{product.id}}" class="form-control form-control-lg">{{product.title}}</option>
+                      {% endfor %}
+                    </select>    
+                    <label class="form-label" for="Catagory"></label>
+                  </div><br>
+                  <div class="form-outline mb-4">
+                    <input type="text" id="form3Example3cg" name="title" class="form-control form-control-lg" placeholder="Product Name" required >
+                    <label class="form-label" for="title"></label>
+                  </div>
+  
+                  <div class="form-outline mb-4">
+                    <input type="number"  name="price" placeholder="Product Price" class="form-control form-control-lg" required >
+                    <label class="form-label" for="price" ></label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <textarea name="description" class="form-control form-control-lg" placeholder="Description"></textarea>
+                    <label class="form-label" for="Description"></label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <img id="pic" src="" width="200px" height="200px" style="display: none;" >
+                    <label class="form-label" for="Image"><b>Product Image</b></label>
+                    <input id='prdimg' type="file" class="form-control form-control-lg" name="image" />
+                  </div>
+                  
+                  
+                    <div class="mb-3 imag">
+                      <label class="label-class1">Upload multi image choose only(jpg,jpeg,webp,png)</label>
+                      <input class="images" type="file" name="images" multiple id="multi_upload_namrce" ><br>
+                  
+                      <div class="imgview">
+                     <!-- <div class="multiimgvalidation" style="color: #FF0000;"></div>  -->
+                    </div>
+                  <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Post Product</button>
+                  </div>
+                  <div id="product_added"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+ $('#product-form').on('submit', function (event) {
+      event.preventDefault();
+
+      var formData = new FormData(this);
+      var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+      formData.append('csrfmiddlewaretoken', csrfToken);
+
+      $.ajax({
+          type: 'POST',
+          url: '/addproduct/',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+              $('#product_added').text("Product Added Successfully");
+          },
+          error: function (response) {
+              $('#product_added').text(response.responseJSON.error);
+          }
+      });
+  });
+
+  $(document).ready(function () {
+      $(document).on('change', '#multi_upload_namrce', function (event) {
+          event.preventDefault();
+
+          var fileInput = $(this);
+          var files = fileInput[0].files;
+          var fd = new FormData();
+
+          $.each(files, function (i, file) {
+              fd.append('image', file);
+          });
+
+          var csrfToken = $('[name=csrfmiddlewaretoken]').val()
+          fd.append('csrfmiddlewaretoken', csrfToken);
+
+          $.ajax({
+              url: '/addproduct_upload_images/',
+              type: 'POST',
+              data: fd,
+              dataType: 'json',
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                $('.imgview').append(
+                    "<div class='mb-3 imag' data-image-id='" + data.image_id + "'>" +
+                    "<img width='200px' class='imgsize' src='" + data.url + "' />" +
+                    "<input type='hidden' name='newsfeedsmultipleimg[]' value='" + data.name + "' id='hidden_image' />" +
+                    "<button class='delbtnnewsfeedmutliple'><i class='fa fa-remove'></i></button></div>"
+                );
+            }
+          });
+      });
+  });
+
+  $(document).on('click', '.delbtnnewsfeedmutliple', function (event) {
+    event.preventDefault();
+
+    var imageId = $(this).closest('.imag').data('image-id');
+
+    
+    function deleteImage(imageId) {
+        var csrfToken = '{{ csrf_token }}'; 
+        $.ajax({
+            type: 'POST',
+            url: '/delete_image/',
+            data: { 'image_id': imageId, 'csrfmiddlewaretoken': csrfToken },
+            success: function (data) {
+              if (data.success) {
+                $('div[data-image-id="' + imageId + '"]').remove(); 
+                $('#del').text("Image removed successfully");
+                setTimeout(function () {
+                    $('#del').text("");
+                }, 1000);
+            } else {
+                console.log('Error:', data.error_message);
+                $('#del').text(data.error_message);
+            }
+            },
+            error: function (error) {
+                console.log(error);
+                $('#del').text('An error occurred');
+            }
+        });
+    }
+
+    deleteImage(imageId);
+});
+    $(document).on('click', '.delbtnnewsfeedmutliple', function (event) {
+          event.preventDefault();
+          $(this).closest('.imag').find(".imgsize").remove()
+          $(this).remove()
+        });
+
+        $('#prdimg').on('change', function () {
+          var input = this;
+    
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+    
+            reader.onload = function (e) {
+              // Update the preview image src attribute
+              $('#pic').attr('src', e.target.result).show();
+            };
+    
+            reader.readAsDataURL(input.files[0]);
+          }
+        });
+    </script>
+    {%endblock %}

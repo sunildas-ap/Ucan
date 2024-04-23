@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    <!-- Map Begin -->
+    <div class="map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.5036728694695!2d76.2197540737782!3d11.000786255017836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba7cce05a42ee09%3A0x54f67afa3d76f84d!2sAl%20Jamia%20Arts%20and%20Science%20College!5e0!3m2!1sen!2sin!4v1707300471492!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <!-- Map End -->
+
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="contact__text">
+                        {% for x in contacthead %}
+                        <div class="section-title">
+                            <span>{{x.title}}</span>
+                            <h2>{{x.job_title}}</h2>
+                            <p>{{x.description}}</p>
+                        </div>
+                        {% endfor %}
+                        <ul>
+                            {% for x in country %}
+                            <li>
+                                <h4>{{x.title}}</h4>
+                                <p>{{x.job_title}} <br />{{x.description}}</p>
+                            </li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </div>
+                </div>
+           
+    </section>
+    <!-- Contact Section End -->
+
+   
+    <!-- Footer Section End -->
+
+   
+
+   
+{% endblock %}

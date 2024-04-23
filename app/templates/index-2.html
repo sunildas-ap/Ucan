@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .featured_item_pic {
+        height: 250px; /* Increased height for better visibility */
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px; /* Adding border-radius for a rounded look */
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product__item {
+        margin-bottom: 30px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Adding shadow for depth */
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .product__item:hover {
+        transform: translateY(-5px); /* Hover effect - lift the item slightly */
+    }
+
+    .featured_item_pic a.add-to-cart {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .featured_item_pic:hover a.add-to-cart {
+        opacity: 1;
+    }
+
+    .featured_item_text {
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .featured_item_text h6 {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    .featured_item_text h5 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff5722; /* Changing price color */
+        margin-bottom: 10px;
+    }
+
+    .cart-btn {
+        background-color: #ff5722; /* Changing add to cart button color */
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .cart-btn:hover {
+        background-color: #f44336; /* Hover effect for the add to cart button */
+    }
+
+    .cart_addition {
+        font-size: 16px;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .featured_item_text {
+    padding: 20px 0;
+    text-align: center;
+    height: 180px; /* Set a fixed height for the text container */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center; /* Center align items horizontally */
+}
+
+.featured_item_text h6,
+.featured_item_text h5 {
+    margin: 0; /* Reset margin to avoid extra space */
+}
+
+.cart-btn {
+    background-color: #ff5722; /* Changing add to cart button color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    align-self: center; /* Center align the button within the flex container */
+}
+
+.cart-btn:hover {
+    background-color: #f44336; /* Hover effect for the add to cart button */
+}
+</style>
+
+    <section class="hero">
+        <div class="hero__slider owl-carousel owl-loaded owl-drag">  
+            {% for item in slider %}            
+        <div class="owl-stage-outer"><div class="owl-stage" style="transform: translate3d(-2698px, 0px, 0px); transition: all 0s ease 0s; width: 8094px;"><div class="owl-item cloned" style="width: 1349px;"><div class="hero__items set-bg" data-setbg="{{item.image.url}}" style="background-image: url(&quot;{{item.image.url}},&quot;);">
+        <div class="container">
+        <div class="row">            
+        <div class="col-xl-5 col-lg-7 col-md-8">
+        <div class="hero__text">
+        <h6>{{item.title}}</h6>
+        <h2>{{item.job_title}}</h2>
+        <p>{{item.description}}</p>
+        
+        <a href="{% url 'shop' %}" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+        </div>
+        </div>{% endfor %}
+        </div>
+       
+        </div>
+    </div></div></section>
+     
+
+
+    <section class="banner spad">
+        <div class="container">
+          <div class="row">
+             <div class="col-lg-7 offset-lg-4">
+               <div class="banner__item">
+                  <div class="banner__item__pic">
+                    <img src="{{ banner1.image.url }}" alt="">
+                </div>
+          <div class="banner__item__text">
+            <h2>{{ banner1.title }}</h2>
+               </div>
+            </div>
+         </div>
+        <div class="col-lg-5">
+           <div class="banner__item banner__item--middle">
+              <div class="banner__item__pic">
+               <img src="{{ banner2.image.url }}" alt="">
+        </div>
+        <div class="banner__item__text">
+           <h2>{{ banner2.title }}</h2>
+             </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="banner__item banner__item--last">
+             <div class="banner__item__pic">
+               <img src="{{banner3.image.url }}" alt="">
+            </div>
+        <div class="banner__item__text">
+          <h2>{{ banner3.title }}</h2>
+                   </div>
+                </div>
+             </div>
+          </div>
+        </div>
+     </section>
+    <!-- Banner Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <ul class="filter__controls">
+                <li data-filter=".new-arrivals">New Arrivals</li>
+            </ul>
+           
+            <div class="row product__filter" style="margin-left: 30px;">
+                {% for product in products|slice:":8" %}
+                <div class="col-lg-3 col-md-6 col-sm-6 mix new-arrivals" id="productsection">
+                    <div class="product__item">
+                        <div class="featured_item_pic set-bg" data-setbg={{product.image.url}}>
+                            <input type="hidden" class="productid" name="product" value="{{product.id}}">
+                            <input type="hidden" class="quantity" name="quantity" value="1">
+                            <a href="" class="add-to-cart" data-item-id="{{ product.id }}"></a>
+                        </div>
+                        <div class="featured_item_text">
+                            <a href="{% url 'single_product' product.id %}">
+                                <h6>{{ product.name }}{{ product.title }}</h6>
+                            </a>
+                            <h5> ₹{{ product.price }}</h5>
+                            <button class="cart-btn btn-primary"><i class="fa fa-shopping-cart"></i>add to cart</button>
+                            <div class="cart_addition" style="font-size: large; text-align: center;"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+                </div>
+                
+                <a href="{% url 'shop' %}"> <button class="btn btn-info" style="margin-left: 600px;">View  More</button></a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Product Section End -->
+
+    <!-- Instagram Section Begin -->
+    <section class="instagram spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    {% for image in instagram_pic %}
+                    <div class="instagram__pic">
+                        <div class="instagram__pic__item set-bg" data-setbg="{{image.image.url}}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+               
+                <div class="col-lg-4">
+                    <div class="instagram__text">
+                        <h2>{{insta.title}}</h2>
+                        <p>{{insta.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><br>
+    <!-- Instagram Section End -->
+
+    <!-- Latest Blog Section Begin -->
+   
+    <!-- Latest Blog Section End -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script>
+		
+
+  
+    $(document).on('click', '.cart-btn', function () {
+        var productid = $(this).closest(".product__item").find(".productid").val();
+        var qty = $(this).closest(".product__item").find(".quantity").val();
+
+        var cartAdditionElement = $(this).closest(".product__item").find(".cart_addition");
+
+        $.ajax({
+            url: "/add_to_cart/",
+            type: "POST",
+            data: {
+                'item_id': productid,
+                'quantity': qty,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (data) {
+                if (data.success) {
+                    $("#cart-count").text(data.cart_count);
+                    cartAdditionElement.html('Item added to cart');
+
+                    setTimeout(function () {
+                        cartAdditionElement.empty();
+                    }, 1000);
+                } 
+                else {
+                    alert("Error adding to cart.");
+                }
+            },
+            error: function (error) {
+                console.error("Error in AJAX call:", error);
+                alert("Error adding to cart. Please try again.");
+            }
+        });
+    });
+
+
+  </script>	
+ 
+{% endblock %}

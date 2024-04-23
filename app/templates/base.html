@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+<!-- Mirrored from themewagon.github.io/malefashion/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 27 Oct 2023 08:33:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UCAN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}" >
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/customstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.blue.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/style.violet.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}" >
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" >
+    <link rel="stylesheet" href="{% static 'css/profile.css'%}" >
+    {% comment %} <link rel="stylesheet" href="{% static 'css/addproduct.css'%}" > {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="{% static 'css/changepassword.css'%}" > {% endcomment %}
+</head>
+<style>
+    .popupfeed {
+        display: none;
+    }
+  
+    .whats-app{
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+        color: #25d366;
+        text-align: center;
+    
+  
+    }
+    .header__nav__option
+    {
+        font-size: 18px;
+    }
+    </style>
+
+<body>
+    {% comment %} <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div> {% endcomment %}
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+                <a href="#">Sign in</a>
+                <a href="#">FAQs</a>
+            </div>
+            <div class="offcanvas__top__hover">
+                <span>Usd <i class="arrow_carrot-down"></i></span>
+                <ul>
+                    <li>USD</li>
+                    <li>EUR</li>
+                    <li>USD</li>
+                </ul>
+            </div>
+        </div>
+        <div class="offcanvas__nav__option">
+            <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
+            <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
+            <a href="#"><img src="{% static 'img/icon/cart.png'%}" alt=""> <span></span></a>
+            <div class="price">$0.00</div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p></p>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-7">
+                        <div class="header__top__left">
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-5">
+                        <div class="header__top__right">
+                            <div class="header__top__links">
+                                <a href="{% url 'register' %}">Sign in</a>
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid" style="background-color: #f0f0f0;" >
+            <div class="row" style="background-color: #f0f0f0;">
+                <div class="col-lg-3 col-md-3" >
+                    <div class="header__logo">
+                      <img src="{% static 'logo.png' %}" alt="" style="margin-left:20px; height: 30px; ">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li><a href="{% url 'index2' %}">Home</a></li>
+                            <li><a href="{% url 'about' %}">About</a></li>
+                            <li><a href="{% url 'shop' %}">Products</a></li>
+                            <li><a href="{% url 'job' %}">Jobs</a></li>
+                                 {% comment %}<ul class="dropdown">
+                                    <li><a href="{% url 'about' %}">About Us</a></li>
+                                    <li><a href="{% url 'shop_details' %}">Shop Details</a></li>
+                                    <li><a href="{% url 'shopping_cart' %}">Shopping Cart</a></li>
+                                    <li><a href="{% url 'checkout' %}">Check Out</a></li> {% endcomment %}
+                                    {% comment %} <li><a href="{% url 'blog_details' %}">Blog Details</a></li> {% endcomment %}
+                              
+                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+                        <a class="shopping-cart" href="{% url 'view_cart' %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                          </svg><span id="cart-count"  class="badge badge-pill badge-info" style="margin-top: -10px;margin-left:10px;">{{ cart_count }}</span></a>
+                        {% if request.user.is_authenticated %}
+										<a href="{% url 'profile' %}">
+											<svg width="23" height="23" viewBox="0 0 24 24"fill="none">
+											<path fill-rule="evenodd" clip-rule="evenodd"d="M16 9C16 11.2091 14.2091 13 12 13C9.79086 13 8 11.2091 8 9C8 6.79086 9.79086 5 12 5C14.2091 5 16 6.79086 16 9ZM14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9Z"
+											  fill="currentColor"/>
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM3 12C3 14.0902 3.71255 16.014 4.90798 17.5417C6.55245 15.3889 9.14627 14 12.0645 14C14.9448 14 17.5092 15.3531 19.1565 17.4583C20.313 15.9443 21 14.0524 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12ZM12 21C9.84977 21 7.87565 20.2459 6.32767 18.9878C7.59352 17.1812 9.69106 16 12.0645 16C14.4084 16 16.4833 17.1521 17.7538 18.9209C16.1939 20.2191 14.1881 21 12 21Z"
+											  fill="currentColor"/>
+										  </svg></a>
+                                           {% if roll == 'seller' and choice == 'yes' %} 
+										  <a href="{% url 'addproduct_data' %}" style="text-decoration-line: none; color: black;">Add Product</a> 
+                                         {% elif roll == 'company' %}
+                                          <a href="{% url 'jobpost' %}" style="text-decoration-line: none; color: black;">Add job</a>
+                                          {% endif %} 
+				                        {% else %}
+										  <a href="{% url 'user_login' %}" style="text-decoration-line: none; color: black;">Login</a>
+								        {% endif %}
+                                        {% if request.user.is_authenticated %}
+                                        <a href="{% url 'chat_users' %}" style="text-decoration-line: none; color: black;">chat</a>
+                                        {% endif %}
+                                  </div>
+                             </div>
+                      </div>
+                <div class="canvas__open"><i class="fa fa-bars"></i></div>
+          </div>
+    </header>
+    {% block content %}{% endblock  %}
+    <a class="whats-app" href="https://api.whatsapp.com/send?phone=+919746308760&text=Hello i want to know more about you product"><svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+        <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+      </svg></a>
+    <footer class="footer">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="footer__about">
+                      <div class="footer__logo">
+                        <img src="{% static 'logo.png' %}" alt="" style="margin-left:20px; height: 30px;mix-blend-mode: multiply; ">
+                      </div>
+                      <p>The customer is at the heart of our unique business model, which includes design.</p>
+                  </div>
+              </div>
+              <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                  <div class="footer__widget">
+                      <h6>Shopping</h6>
+                      <ul>
+                          <li><a href="{% url 'register' %}">Register</a></li>
+                          <li><a href="{% url 'user_login' %}">Login</a></li>
+                          <li><a href="{% url 'index2' %}">Home</a></li>
+                          {% if request.user.is_authenticated %}
+                          <li><a href="{% url 'profile' %}">profile</a></li>
+                          {% endif %}
+                      </ul>
+                  </div>
+              </div>
+              <div class="col-lg-2 col-md-3 col-sm-6">
+                  <div class="footer__widget">
+                      <h6>Quick Access</h6>
+                      <ul>
+                          <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                          <li><a href="{% url 'about' %}">About</a></li>
+                          <li><a href="{% url 'shop' %}">products</a></li>
+                          <li><a href="{% url 'job' %}">Jobs</a></li>
+                      </ul>
+                  </div>
+              </div>
+              {% comment %} <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                  <div class="footer__widget">
+                      <h6>NewLetter</h6>
+                      <div class="footer__newslatter">
+                          <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                          <form action="#">
+                              <input type="text" placeholder="Your email">
+                              <button type="submit"><span class="icon_mail_alt"></span></button>
+                          </form>
+                      </div>
+                  </div>
+              </div> {% endcomment %}
+          </div>
+          <div class="row">
+              <div class="col-lg-12 text-center">
+                  <div class="footer__copyright__text">
+                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                      <p>Powerd By
+                        &nbsp;Mdigitz 
+                      </p>
+                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
+  <!-- Footer Section End -->
+
+  <!-- Search Begin -->
+  <div class="search-model">
+      <div class="h-100 d-flex align-items-center justify-content-center">
+          <div class="search-close-switch">+</div>
+          <form class="search-model-form">
+              <input type="text" id="search-input" placeholder="Search here.....">
+          </form>
+      </div>
+  </div>
+  <!-- Search End -->
+
+  <!-- Js Plugins -->
+  <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js'%}"></script>
+  <script src="{% static 'js/jquery.nice-select.min.js'%}"></script>
+  <script src="{% static 'js/jquery.nicescroll.min.js'%}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js'%}"></script>
+  <script src="{% static 'js/jquery.countdown.min.js'%}"></script>
+  <script src="{% static 'js/jquery.slicknav.js'%}"></script>
+  <script src="{% static 'js/mixitup.min.js'%}"></script>
+  <script src="{% static 'js/owl.carousel.min.js'%}"></script>
+  <script src="{% static 'js/main.js'%}"></script>
+</body>
+
+
+
+</html>

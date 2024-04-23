@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="vh-60" style="margin-bottom: 30px;">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xl-7"> 
+          <h2 class="text-black mb-2 mt-3 text-center">Apply for job</h1>
+          <form method="post" enctype="multipart/form-data" id="job-application-form">
+            {% csrf_token%}
+           <div class="card" style="border-radius: 15px;">
+            <div class="card-body">
+              <div class="row align-items-center pt-4 pb-3" style="margin-left: 100px;">
+                <div>
+                    <label for="job_name">Post applying</label>
+                  <input type="text" name="job_name" class="form-control form-control-lg" value="{{jobs.title}}" readonly> 
+                </div> 
+              <div>
+                <label for="name"></label>
+                <input type="text" name="name" class="form-control form-control-lg" placeholder="your name" required/> 
+            </div> 
+            <div>
+              <input type="hidden" name="job_id" value="{{ jobs.id }}">
+            </div>
+            <div>
+                <label for="email"></label>
+                <input type="email" name="email" class="form-control form-control-lg" placeholder="email" required/> 
+            </div> 
+            <div>
+                <label for="phonenumber"></label>
+                <input type="number" name="phonenumber" class="form-control form-control-lg" placeholder="Phonenumber" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required/> 
+            </div> 
+            <div><br>
+               <img id="image" src="" width="200px" height="200px" style="display: none;" >
+                <input id="jobappliying" type="file" name="photo" class="form-control form-control-lg" required/> 
+                <label for="photo">your photo</label>
+            </div> 
+            <div>
+                <input type="file" name="resume" class="form-control form-control-lg"  required/> 
+                <label for="resume">resume</label>
+            </div> 
+              <hr class="mx-n3">
+              <div class="px-5 py-4">
+                <button type="submit" class="btn btn-primary btn-lg">Send application</button>
+              </div>
+              <div id="job_applied" style="font-size: large;margin-left: 20px;"></div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#job-application-form').on('submit', function (event) {
+          event.preventDefault();
+  
+          // Validate email
+          var email = $('[name="email"]').val();
+          var emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+          if (!emailRegex.test(email)) {
+              $('#job_applied').text('Invalid email address format.');
+              return;
+          }
+  
+          // Validate phone number
+          var phoneNumber = $('[name="phonenumber"]').val();
+          if (phoneNumber.length !== 10) {
+              $('#job_applied').text('Exactly 10 digits are required for the phone number.');
+              return;
+          }
+  
+          var jobID = $(this).find("[name='job_id']").val();
+          var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+          var formData = new FormData(this);
+  
+          $.ajax({
+              type: 'POST',
+              url: 'job_applying',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                  $('#job_applied').text("Job applied successfully");
+                  setTimeout(function () {
+                      $('#job_applied').text("");
+                  }, 1000);
+              },
+              error: function (response) {
+                  var errorMessage = response.responseJSON.error || "An error occurred.";
+                  $('#job_applied').text(errorMessage);
+                  setTimeout(function () {
+                      $('#job_applied').text("");
+                  }, 1000);
+              }
+          });
+      });
+  
+      // Move the file input change event handler inside the ready function
+      $('#jobappliying').on('change', function () {
+          var input = this;
+  
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+  
+              reader.onload = function (e) {
+                  // Update the preview image src attribute
+                  $('#image').attr('src', e.target.result).show();
+              };
+  
+              reader.readAsDataURL(input.files[0]);
+          }
+      });
+  });
+  </script>
+  {% endblock %}

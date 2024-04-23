@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  /* Styling for product cards */
+  .product__item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .product__item:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Styling for product images */
+  .featured_item_pic {
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .featured_item_pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Styling for product titles and prices */
+  .featured_item_text {
+    margin-top: 15px;
+  }
+  
+  .featured_item_text h6 {
+    margin-bottom: 5px;
+    font-size: 18px;
+  }
+  
+  .featured_item_text h5 {
+    font-size: 20px;
+    color: #f44336; /* Change the color as needed */
+  }
+  
+  /* Styling for buttons */
+  .featured_item_text .btn {
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 13px;
+    width: 48%; /* Adjusted width for buttons */
+    display: inline-block;
+  }
+  
+  .featured_item_text .btn a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .featured_item_text .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .featured_item_text .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  /* Button hover effects */
+  .featured_item_text .btn:hover {
+    opacity: 0.9;
+  }
+  
+  /* Margin between buttons */
+  .featured_item_text .btn:nth-child(2) {
+    margin-left: 4%; /* Adjusted margin between buttons */
+  }
+  
+  /* Responsive adjustment for smaller screens */
+  @media (max-width: 768px) {
+    .featured_item_text .btn {
+      width: 100%; /* Full width for buttons on smaller screens */
+      margin-bottom: 5px; /* Add margin between buttons on smaller screens */
+    }
+  
+    .featured_item_text .btn:nth-child(2) {
+      margin-left: 0; /* Remove left margin for second button on smaller screens */
+    }
+  }
+  .left-link {
+    display: block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.left-link:hover {
+    background-color: #f0f0f0;
+}
+
+.left-link.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.password-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+}
+</style>
+<h3 style="text-align: center; text-decoration: underline;">Manage Your Products</h3>
+<div class="container">           
+  <div class="row d-flex justify-content-center  h-100">
+    <div class="col col-lg-4 col-xl-4">
+      <div class="card left-link-panel">
+          <a href="/profile" class="{% if request.path == '/profile' %}active{% endif %} left-link">Profile</a>
+          {% if roll == 'seller' and choice == 'yes' %}
+              <a href="/addproduct_data" class="{% if request.path == '/addproduct_data' %}active{% endif %} left-link">Post Products</a>
+              <a href="/myproducts" class="{% if request.path == '/myproducts' %}active{% endif %} left-link">My products</a>
+              <a href="/userproduct" class="{% if request.path == '/userproduct' %}active{% endif %} left-link">people ordered</a>
+          {% elif roll == 'company' %}
+              <a href="/jobpost" class="{% if request.path == '/jobpost' %}active{% endif %} left-link">Post jobs</a>
+          {% endif %}
+          {% if roll == 'seller' %}
+          {% elif roll == 'company' %}
+              <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
+              <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
+          {% endif %}
+          <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+          <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+      </div>
+  </div>
+ <div class="col col-lg-8 col-xl-8">
+<div class="row product__filter ms-5 mt-4 mb-7">
+  {% for product in products %}
+  <div class="col-lg-4 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+      <div class="product__item">
+        {% if product.image%}
+          <div class="featured_item_pic set-bg" data-setbg={{product.image.url}}>
+              <input type="hidden" class="productid" name="product"  value="{{product.id}}"></input>
+              {%else%}
+              sorry
+              {% endif %}
+              <input type="hidden" class="quantity" name="quantity" value="1"> </input>  
+                <a href="" class="add-to-cart" data-item-id="{{ product.id }}" >
+            </div>
+          </a>
+          <div class="featured_item_text">
+              <a href="{% url 'single_product' product.id %}"><h6>{{ product.name }}{{ product.title }}</h6></a>
+            <h5> ₹{{ product.price }}</h5></a>
+            <div class="card-body" >
+              <button type="submit" class="btn btn-primary" style="margin-left: -20px;"> <a href="{% url 'single_product' product.id %}" style="color: white;">View</a></button> 
+                <button type="submit" class="btn btn-primary" style="width:70px;"> <a href="{% url 'editproduct' product.id %}" style="color: white;">Edit</a></button><br><br>
+                <button type="submit" id="del" class="btn btn-primary" style="width:70px;" value='{{product.id}}'>Delete</button></div>
+                <div id="deleted"></div>
+          </div>
+        </div>
+      </div> {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+</div></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  
+    $(document).ready(function() {
+      $('.btn-primary#del').on('click', function(event) {
+        event.preventDefault(); 
+  
+        var productId = $(this).val();
+        console.log(productId);
+  
+        $.ajax({
+          type: 'POST',
+          url: '/delete_product/' + productId + '/',
+          data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+          },
+          success: function(response) {
+              $('#deleted').text(response.message);
+              // Reload the page after successful deletion
+              location.reload();
+          },
+          error: function(xhr, status, error) {
+              $('#deleted').text('Job is not deleted');
+              console.log(xhr.status); 
+          }
+        });
+      });
+    });
+
+
+</script>
+  {% endblock %}

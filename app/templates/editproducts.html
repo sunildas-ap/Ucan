@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+
+
+    </style>
+    <div class="hero-area hero-bg">
+        <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 offset-lg-2 text-center">
+                        <div class="hero-text">
+                            <div class="hero-text-tablecell">
+                        <div class="breadcrumb-text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <section class="vh-90 bg-image">
+      <div class="mask d-flex align-items-start h-100 gradient-custom-3">
+        <div class="container h-80">
+          <div class="row d-flex justify-content-center h-80">
+           <div class="col col-lg-4 col-xl-4">
+               <div class="card leftlinkpanel">
+             <a href="/profile"  class=" {% if request.path == '/profile' %}active{% endif %} postporudtcs leftlink"> Profile</a>
+          <a href="addproduct"  class=" {% if request.path == '/addproduct' %}active{% endif %} postporudtcs leftlink">Post Products</a>
+            <a class=" {% if request.path == '/order-history' %}active{% endif %} Orderhistory leftlink"  href="/order-history">Order history</a>
+              <a href="/myproducts" class="  {% if request.path == '/myproducts' %}active{% endif %} myproducts leftlink">My products</a>
+              <a href="/update" class="  {% if request.path == '/update' %}active{% endif %} postporudtcs leftlink">Edit Profile</a>
+            </div>
+          </div>
+          
+            <div class="col-8 col-md-8 col-lg-8 col-xl-8" style="margin-bottom:50px; margin-top:50px">
+                
+                  <h3 class="text-uppercase text-center mb-3">Manage Product</h3>
+                  <form method='post' enctype="multipart/form-data" style="margin-bottom: 50px;" action='{% url "editproductform" %}' id="productedit-form">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">   
+                        <select name="product_category" class="form-control form-control-lg" style="width:300px;">
+                            {% for product in all_product %}
+                                {% if product.id == product_category_id %}
+                                    <option value="{{ product.id }}" selected>{{ product.title }}</option>
+                                {% else %}
+                                    <option value="{{ product.id }}">{{ product.title }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>    
+                      <label class="form-label" for="Catagory"></label>
+                    </div><br>
+                    <div class="form-outline mb-4">
+                      <input type="text" id="form3Example3cg" name="title" class="form-control form-control-lg" placeholder="Product Name" value='{{product_value.title}}' required >
+                      <label class="form-label" for="title"></label>
+                    </div>
+    
+                    <div class="form-outline mb-4">
+                      <input type="number"  name="price" placeholder="Product Price" class="form-control form-control-lg" value='{{product_value.price}}' required >
+                      <label class="form-label" for="price" ></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <input type="hidden"  name="pid" class="form-control form-control-lg" value='{{product.id}}' required >
+                    </div>
+                    <div class="form-outline mb-4">
+                      <textarea name="description" class="form-control form-control-lg" placeholder="Description" >{{product_value.description}}</textarea>
+                      <label class="form-label" for="Description"></label>
+                    </div>
+                    <div class="form-outline mb-4">
+                      <img id='prd-image' src="{{product_value.image.url}}"  width='200px' height='200px'>
+                      <input type="file" id="prdimg" class="form-control form-control-lg" name="image"  />
+                      <label class="form-label" for="Image"><b>Product Image</b></label>
+                    </div>
+                    
+                    {% comment %} <div class="mb-3 imag">
+                      <label class="label-class1">Upload multi image </label>
+                      <input  type="file"  name="images" multiple id="multi_upload_namrce"   class="images"  ><br>   
+                      <div class="imgview">
+    
+    
+    
+    
+                      </div> {% endcomment %}
+                      <div class="mb-3 imag d-flex flex-wrap">
+                        <label class="label-class1">Upload multi image</label>
+                        <input class="images" type="file" name="images" multiple id="multi_upload_namrce" style="width: 285px;"><br>
+                        <input type='hidden' name='hidden_images' value="{{ product_value.id }}" class='hidden_image_id'  />
+                                        
+                        <div class="imgview">
+                            
+                             </div>
+                            {% for img in multi_img %}
+                            <div class="col-md-6" data-image-id="{{ img.id }}">
+                                <div class="col-sm-9 text-secondary">
+                                    {% if img.image %}
+                                        <img src="{{ img.image.url }}" alt="" style="border-style: solid;border-color: rgb(0, 0, 0);height: 150px;width: 150px;border-radius: 10px;">
+                                        <button class='delbtnnewsfeedmutliple'>
+                                        <i class='fa fa-remove'></i>
+                                        </button>
+                                    {% endif %}
+                                </div><br>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    <p id='del'></p>
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Post Product</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      var imagesToUpload = []; 
+
+$(document).ready(function () {
+    $(document).on('change', '#multi_upload_namrce', function (event) {
+        event.preventDefault();
+
+        var fileInput = $(this)[0];
+        var files = fileInput.files;
+
+        $.each(files, function (i, file) {
+            imagesToUpload.push(file);
+        });
+    });
+
+    $('#productedit-form').on('submit', function (event) {
+        event.preventDefault();
+
+        var product_id = $('[name="pid"]').val(); 
+        var csrfToken = $('[name="csrfmiddlewaretoken"]').val(); 
+
+        var formData = new FormData();
+        formData.append('product_id', product_id);
+        formData.append('csrfmiddlewaretoken', csrfToken);
+
+        // Append all images stored in the imagesToUpload array to FormData
+        imagesToUpload.forEach(function (file) {
+            formData.append('newsfeedsmultipleimg[]', file);
+        });
+
+
+        $.ajax({
+            url: '/upload_image/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log('Images uploaded successfully');
+
+                imagesToUpload = [];
+
+                $('#productedit-form')[0].submit();
+            },
+            error: function (error) {
+                // Handle error response here
+                console.error('Error uploading images:', error);
+            }
+        });
+    });
+});
+$('#productedit-form').on('submit', function (event) {
+  event.preventDefault();
+
+
+  var formData = new FormData()
+        $.ajax({
+            url: '/upload_image/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log('Images uploaded successfully');
+
+                imagesToUpload = [];
+
+                $('#productedit-form')[0].submit();
+            },
+            error: function (error) {
+                // Handle error response here
+                console.error('Error uploading images:', error);
+            }
+        });
+      });
+$(document).ready(function () {
+    $(document).on('change', '#multi_upload_namrce', function (event) {
+        event.preventDefault();
+
+        var fileInput = $(this)[0];
+        var files = fileInput.files;
+
+        for (var i = 0; i < files.length; i++) {
+            (function (index) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('.imgview').append("<div class='mb-3 imag'><img width='200px' class='imgsize' src='" + e.target.result + "' /><input type='hidden' name='newsfeedsmultipleimg[]' value='" + files[index].name + "' id='hidden_image'  /> <button class='delbtnnewsfeedmutliple' ><i class='fa fa-remove'></i> </button></div>");
+                }
+                reader.readAsDataURL(files[index]);
+            })(i);
+        }
+    });
+});
+
+ 
+      function deleteImage(imageId) {
+            $(document).on('click', '.delbtnnewsfeedmutliple', function() {
+                var imageId = $(this).data('image-id');
+                deleteImage(imageId);
+             });
+                $.ajax({
+                    type: 'POST',
+                    url: '/editimg_delete_image/',
+                    data: { 'image_id': imageId, 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                    success: function (data) {
+                        if (data.success) {
+                            $('div[data-image-id="' + imageId + '"]').remove();
+                            $('#del').text("Product removed Successfully");
+                            setTimeout(function() {
+                                $('#del').text("");
+                            }, 1000);
+                            
+                        
+                        } else {
+                            console.log('Error:', data.error_message);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        
+        $(document).on('click', '.delbtnnewsfeedmutliple', function (event) {
+            event.preventDefault();
+
+            var imageId = $(this).closest('.col-md-6').data('image-id');
+            
+            deleteImage(imageId);
+        });
+        $(document).ready(function () {
+          $('#prdimg').on('change', function () {
+              var input = this;
+      
+              if (input.files && input.files[0]) {
+                  var reader = new FileReader();
+      
+                  reader.onload = function (e) {
+                      // Update the preview image src attribute
+                      $('#prd-image').attr('src', e.target.result);
+                  };
+      
+                  reader.readAsDataURL(input.files[0]);
+              }
+          });
+      });
+      
+
+function deleteNewlyAddedImage(index) {
+    imagesToUpload.splice(index, 1); // Remove the image from the imagesToUpload array
+
+    // Remove the image element from the UI
+    $('.imgview .imag').eq(index).remove();
+}
+
+$(document).on('click', '.delbtnnewsfeedmutliple', function (event) {
+    event.preventDefault();
+    
+    var index = $(this).closest('.imag').index(); // Get the index of the clicked image
+
+    deleteNewlyAddedImage(index);
+});
+    </script>
+    {%endblock %}

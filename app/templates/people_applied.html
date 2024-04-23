@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  <style>
+    .left-link {
+      display: block;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+  }
+  
+  .left-link:hover {
+      background-color: #f0f0f0;
+  }
+  
+  .left-link.active {
+      font-weight: bold;
+      background-color: #007bff;
+      color: #fff;
+  }
+  
+  .password-link {
+      display: block;
+      margin-top: 20px;
+      color: #007bff;
+  }
+    </style>
+</style>
+<h3 style="text-align: center; text-decoration: underline;">People applied</h3>
+<div class="container">           
+  <div class="row d-flex justify-content-center  h-100">
+    <div class="col col-lg-4 col-xl-4">
+      <div class="card leftlinkpanel">
+         <a href="/profile"  class=" {% if request.path == '/profile' %}active{% endif %} profile leftlink"> Profile</a>
+         {% if roll == 'seller' and choice == 'yes' %} 
+         <a href="addproduct"  class=" {% if request.path == '/addproduct' %}active{% endif %} postproduct leftlink">Post Products</a>
+         <a href="/myproducts" class="  {% if request.path == '/myproducts' %}active{% endif %} myproducts leftlink">My products</a>
+         {% elif roll == 'company' %}
+         <a href="/jobpost" class="  {% if request.path == '/jobpost' %}active{% endif %} postjob leftlink">Post jobs</a>
+         {% endif %}
+         {% if roll == 'seller' %} 
+         <a class=" {% if request.path == '/order-history' %}active{% endif %} Orderhistory leftlink"  href="/order-history">Order history</a>
+         {% elif roll == 'company' %}
+         <a href="/myjob" class="  {% if request.path == '/myjob' %}active{% endif %} myjobs leftlink">my jobs</a>
+         <a href="/people_applied" class="  {% if request.path == '/people_applied' %}active{% endif %} people_applied leftlink">people applied</a>
+         {% endif %}
+         <a href="/logout" class="  {% if request.path == '/logout' %}active{% endif %} logout leftlink">Logout</a>
+         <a  href="{% url "password" user.id%}" style="width:300px;height: 40px;font-size: medium;">Change Password</a>
+      </div>
+     </div>
+ <div class="col col-lg-8 col-xl-8">
+<div class="row">{% for job in job_applications %}
+    <div class="col-md-4">
+      <div class="card" style="width: 18rem;margin-top:80px;margin-left:60px;margin-bottom:80px;">
+          <img class="card-img-top" src={{job.photo.url}} alt="Card image cap" style="width: 400px;height: 200px;">
+          <div class="card-body" style="height: 100px;">
+            <h5 class="card-title" style="text-decoration-line: underline;"> <b>post</b></h5>
+            <h5 class="card-title"> {{job.job_title}}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>phone number</b></li>
+            <li class="list-group-item">{{job.phoneno}}</li>
+            <li class="list-group-item"><b>name</b></li>
+            <li class="list-group-item">{{job.name}}</li>
+            <li class="list-group-item"><b>Email</b></li>
+            <li class="list-group-item">{{job.email}}</li>
+            <li class="list-group-item"><b>resume:</b><a href="{{job.resume.url}}" type="application/pdf" />&nbsp;click</a></li>
+          </ul>       
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+      {% endblock %}
+    
